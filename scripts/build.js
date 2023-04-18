@@ -12,8 +12,8 @@ const {gzipSync} = require('zlib')
 const fs = require('fs-extra')
 // 获取命令行参数
 const args = require('minimist')(process.argv.slice(2))
-// 获取包信息
 const {targets: allTargets,fuzzyMatchTarget} = require('./utils');
+// 获取包信息
 // 获取 target 也就是_
 const targets = args._
 // 一些命令行参数
@@ -25,6 +25,7 @@ const prodOnly = !devOnly && (args.prodOnly || args.p)
 // 是否生成 sourceMap
 const sourceMap = args.sourceMap || args.s
 // 是否release版本 如果是则 需要清除build的缓存,避免过时的枚举
+
 const isRelease = args.release
 const buildTypes = args.t || args.types || isRelease
 // 是否构建所有
@@ -35,6 +36,15 @@ const commit = execa.sync('git', ['rev-parse', 'HEAD']).stdout.slice(0, 7)
 const run = async () => {
     if (isRelease) {
         await fs.remove(path.resolve(__dirname, '../node_modules/.rts2_cache'))
+    }
+    // 如果构建参数不存在的话 构建所有
+    if (!targets.length){
+        await buildAll(allTargets)
+        checkAllSizes(allTargets)
+    } else {
+        //构建
+        await buildAll(fuzzyMatchTarget(targets,buildAllMatching))
+        checkAllSizes(fuzzyMatchTarget(targets,buildAllMatching))
     }
 }
 
@@ -117,6 +127,17 @@ async function build(target) {
 }
 
 /**
+ * 执行构建方法
+ * @param targets 打包文件
+ * @returns {Promise<void>}
+ */
+async function buildAll(targets){
+    // 获取 操作系统核数 执行构建方法
+    await runParallel(require('os').cpus().length,targets,build)
+    console.log(chalk.yellow('构建成功'))
+}
+
+/**
  * 并行执行
  * @param maxConcurrency 最大并发
  * @param source 源目标
@@ -142,6 +163,31 @@ async function runParallel(maxConcurrency,source,iteratorFn){
 }
 
 /**
+ * 检查所有文件大小
+ * @param targets
+ */
+function checkAllSizes(targets){
+    if (devOnly || (formats && !formats.includes('global'))){
+        return
+    }
+    console.log()
+    for (const target of targets){
+        checkSize(target)
+    }
+    console.log()
+}
+//
+function checkSize(target) {
+    const pkgDir = path.resolve(`packages/${target}`)
+    checkFileSize(`${pkgDir}/dist/${target}.global.prod.js`)
+    if (!formats || formats.includes('global-runtime')){
+        if (!formats || formats.includes('global-runtime')) {
+            checkFileSize(`${pkgDir}/dist/${target}.runtime.global.prod.js`)
+        }
+    }
+}
+
+/**
  * 检查 文件大小
  * @param filePath 文件路径
  */
@@ -163,6 +209,8 @@ function checkFileSize(filePath) {
         )
     } min: ${minSize} / gzip:${gzippedSize} / brotli: ${compressedSize}`)
 }
+
+run()
 
 
 
