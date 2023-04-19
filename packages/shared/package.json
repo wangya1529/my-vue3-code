@@ -1,18 +1,15 @@
 {
-  "name": "my-reactivity",
+  "name": "my-shared",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.ts",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "buildOptions": {
-    "name": "VueReactivity",
     "formats": [
       "esm-bundler",
-      "esm-browser",
-      "cjs",
-      "global"
+      "cjs"
     ]
   },
   "keywords": [],
