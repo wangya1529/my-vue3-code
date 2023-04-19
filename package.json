@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "breactivity": "node scripts/build.js reactivity",
-    "bvue": "node scripts/build.js vue"
+    "bvue": "node scripts/build.js vue",
+    "bshared": "node scripts/build.js shared"
   },
   "keywords": [],
   "author": "ywang24",

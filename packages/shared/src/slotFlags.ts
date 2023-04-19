@@ -1,7 +1,7 @@
 /**
  * 插槽标识
  */
-export const enum SlopFlags  {
+export const enum SlotFlags  {
     /**
      * 稳定的Fragment，STABLE，
      * 仅引用插槽道具或上下文状态的稳定插槽。
@@ -21,7 +21,7 @@ export const enum SlopFlags  {
     FORWARDED = 3
 }
 export const slotFlagsText = {
-    [SlopFlags.STABLE]: 'STABLE',
-    [SlopFlags.DYNAMIC]: 'DYNAMIC',
-    [SlopFlags.FORWARDED] : 'FORWARDED'
+    [SlotFlags.STABLE]: 'STABLE',
+    [SlotFlags.DYNAMIC]: 'DYNAMIC',
+    [SlotFlags.FORWARDED] : 'FORWARDED'
 }

@@ -99,6 +99,7 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": [
+    "packages/global.d.ts",
     "packages/*/src",
     "packages/*/__tests__",
     "test-dts"
