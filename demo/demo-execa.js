@@ -4,3 +4,4 @@ const execa = require("execa");
 execa('ls', ['-l']).then(({stdout}) => {
   console.log(stdout);
 })
+
