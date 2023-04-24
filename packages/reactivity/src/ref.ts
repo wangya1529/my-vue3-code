@@ -1,6 +1,7 @@
 import {createDep, Dep} from "./dep";
 import {CollectionTypes} from "./collectionHandlers";
-import {isProxy, isReactive, ShallowReactiveMarker, toRaw, toReactive} from "./reactive";
+import {isProxy, isReactive, toRaw, toReactive} from "./reactive";
+import type { ShallowReactiveMarker } from './reactive'
 import {isTracking, trackEffects} from "./effect";
 import {TrackOpTypes, TriggerOpTypes} from "./operations";
 import {hasChanged, IfAny, isArray} from "@vue/shared";

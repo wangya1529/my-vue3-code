@@ -1,4 +1,4 @@
-import {proxyRefs, Ref, toRef, trackRefValue, triggerRefValue} from "./ref";
+import {Ref, trackRefValue, triggerRefValue} from "./ref";
 import {DebuggerOptions, ReactiveEffect} from "./effect";
 import {Dep} from "./dep";
 import {ReactiveFlags, toRaw} from "./reactive";
@@ -29,7 +29,7 @@ class ComputedRefImpl<T> {
     private _dirty = true
     public readonly effect: ReactiveEffect<T>
     public readonly __v_isRef = true
-    public readonly [ReactiveFlags.IS_READONLY]: boolean
+    public readonly __v_isReadonly: boolean
 
     constructor(getter: ComputedGetter<T>,
                 private readonly _setter: ComputedSetter<T>,
@@ -43,7 +43,7 @@ class ComputedRefImpl<T> {
             }
         })
         this.effect.active = !isSSR
-        this[ReactiveFlags.IS_READONLY] = isReadonly
+        this.__v_isReadonly = isReadonly
     }
 
     get value() {
